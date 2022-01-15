@@ -28,6 +28,20 @@ class Bar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+   if(_state.loginUser == true){ return AppBar(
+      leading:
+          CircleAvatar(backgroundImage: NetworkImage('${_state.user.photoUrl}')),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('My Todo List'),
+          Text('_state.user.name', style: TextStyle(fontSize: 12.0)),
+        ],
+      ),
+      actions: [IconButton(icon: Icon(Icons.login), onPressed: () => _onLogout(context))],
+    );
+  }
+  else {
     return AppBar(
       leading:
           CircleAvatar(backgroundImage: AssetImage('assets/unknown_user.png')),
@@ -38,7 +52,25 @@ class Bar extends StatelessWidget implements PreferredSizeWidget {
           Text('User name goes here', style: TextStyle(fontSize: 12.0)),
         ],
       ),
-      actions: [IconButton(icon: Icon(Icons.login), onPressed: () {})],
+      actions: [IconButton(icon: Icon(Icons.login), onPressed: () => _onLogin(context))],
     );
+  
   }
 }
+
+ void  _onLogout(BuildContext context) async {
+
+final _user = await Navigator.pushNamed(context, '/logout');
+if (_user != null){
+  _state.user =null;
+  _state.logoutUser = true;
+}
+ }
+
+  _onLogin(BuildContext context) async {
+
+final _user = await Navigator.pushNamed(context, '/login');
+if (_user != null){
+  _state.user =_user;
+  _state.loginUser = true;
+}}}

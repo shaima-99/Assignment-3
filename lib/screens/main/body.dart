@@ -71,7 +71,7 @@ else{
   }
 
  void  onTap(BuildContext context, int index, todoList) async {
-   final _todo = await Navigator.pushNamed(context, '/edit',
+   final todo = await Navigator.pushNamed(context, '/edit',
   arguments: _todoList[index]);
  
    if ( todo != null){

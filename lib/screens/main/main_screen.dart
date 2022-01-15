@@ -55,18 +55,32 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> {
   User _user;
 
-List<Todo> _todoList =[];
-bool _isBusy =false;
+List<Todo> _todoList;
+
   get user => _user;
 
-  get todoListFuture => null;
- set user(value) => setState(() =>{} );
+ set user(value) { _user = value;
+ refreshTodoListFuture();} 
+
   get todoList => _todoList;
-  set todoList(value) => setState(() =>{} );
+  set todoList(value) => _todoList= value;
 
-  get isBusy => _isBusy;
-  set isBusy(value) => setState(() => {} );
+Future<List<Todo>> _todoListFuture;
+  get todoListFuture => _todoListFuture;
+  set todoListFuture(value) =>_todoListFuture=value;
 
+bool _loginUser;
+  get loginUser => _loginUser;
+  set loginUser(value) =>_loginUser=value;
+
+done(index) => setState(()=> _todoList[index].done =!_todoList[index].done);
+delete(index) => setState(() => _todoList.removeAt(index));
+
+void refreshTodoListFuture(){
+  if(_user != null){
+    _todoListFuture = TodoService.getTodoListByUser(_user.id);
+  }
+}
   void addTodo(Todo todo) async {
     if (_user != null){
       final Todo _todo =await TodoService.addTodo(todo);
@@ -98,5 +112,5 @@ bool _isBusy =false;
     );
   }
 
-  void refreshTodoListFuture() {}
+  
 }
