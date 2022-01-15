@@ -51,9 +51,26 @@ class MainScreen extends StatefulWidget {
   MainScreenState createState() => MainScreenState();
 }
 
+
 class MainScreenState extends State<MainScreen> {
-  void addTodo(Todo todo) async {}
-  void updateTodo({int index, Todo todo}) async {}
+  User _user;
+  get user => _user;
+
+  get _todoList => null;
+  set user(value) => setState(() {
+  });
+  void addTodo(Todo todo) async {
+    if (_user != null){
+      final Todo _todo =await TodoService.addTodo(todo);
+      setState(() => _todoList.add( _todo)); 
+    }
+  }
+  void updateTodo({int index, Todo todo}) async {
+    if (todo != null){
+      final Todo _todo =await TodoService.updateTodo(todo);
+      setState(() => _todoList[index]= _todo); 
+    }
+  }
   void removeTodo(int index) async {}
 
   @override
@@ -62,8 +79,8 @@ class MainScreenState extends State<MainScreen> {
       onWillPop: () => Future.value(false),
       child: SafeArea(
         child: Scaffold(
-          appBar: Bar(),
-          body: Body(),
+          appBar: Bar( state: this),
+          body:user != null ?  Body(state: this): null,
           floatingActionButton: Float(),
         ),
       ),
