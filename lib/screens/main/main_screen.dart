@@ -54,11 +54,19 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   User _user;
+
+List<Todo> _todoList =[];
+bool _isBusy =false;
   get user => _user;
 
-  get _todoList => null;
-  set user(value) => setState(() {
-  });
+  get todoListFuture => null;
+ set user(value) => setState(() =>{} );
+  get todoList => _todoList;
+  set todoList(value) => setState(() =>{} );
+
+  get isBusy => _isBusy;
+  set isBusy(value) => setState(() => {} );
+
   void addTodo(Todo todo) async {
     if (_user != null){
       final Todo _todo =await TodoService.addTodo(todo);
@@ -71,7 +79,10 @@ class MainScreenState extends State<MainScreen> {
       setState(() => _todoList[index]= _todo); 
     }
   }
-  void removeTodo(int index) async {}
+  void removeTodo(int index) async {
+    await TodoService.removeTodo(_todoList[index]);
+    refreshTodoListFuture();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +92,11 @@ class MainScreenState extends State<MainScreen> {
         child: Scaffold(
           appBar: Bar( state: this),
           body:user != null ?  Body(state: this): null,
-          floatingActionButton: Float(),
+          floatingActionButton: _user != null ? Float(state: this): null,
         ),
       ),
     );
   }
+
+  void refreshTodoListFuture() {}
 }

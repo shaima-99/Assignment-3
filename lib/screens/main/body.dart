@@ -11,6 +11,7 @@
 //        b. Delete a todo - i.e. when the user long-press a todo
 //-----------------------------------------------------------------------------------------------------------------------------
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/todo.dart';
@@ -21,20 +22,52 @@ class Body extends StatelessWidget {
 
   final MainScreenState _state;
 
+
+
+ 
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<Object>(
+      future:  _state.todoListFuture,
+      builder: (context, snapshot){
+if (snapshot.hasData){
+  _state.todoList = snapshot.data;
+
+  return _buildListview (context);
+}
+else{
+ 
+  
+  return Center (child: CircularProgressIndicator());
+}
+      }
+    );
+   
+  }
+  ListView _buildListview(BuildContext context){
     return ListView.separated(
-      itemCount: 5,
-      separatorBuilder: (context, index) => Divider(
+      itemCount: _state.todoList.length,
+      separatorBuilder: (context, index)=> Divider(
         color: Colors.blueGrey,
       ),
       itemBuilder: (context, index) => ListTile(
-        title: Text('Todo title',
-            style: TextStyle(decoration: TextDecoration.lineThrough)),
-        subtitle: Text('Todo description'),
-        onTap: () {},
-        onLongPress: () {},
-      ),
-    );
+        title:  Text('${_state.todoList[index].title}',
+        style: TextStyle(
+          decoration:  _state.todoList[index].done == true
+          ? TextDecoration.lineThrough
+          : TextDecoration.none
+        )
+        ),
+        subtitle: Text('${_state.todoList[index].description}'),
+        onTap: ()=> onTap(context,index,_state.todoList[index]),
+        onLongPress:() => _state.removeTodo(index),
+      )
+       );
   }
+
+  onTap(BuildContext context, int index, todoList) {}
+
+ 
 }
+
