@@ -11,6 +11,7 @@
 //        b. Delete a todo - i.e. when the user long-press a todo
 //-----------------------------------------------------------------------------------------------------------------------------
 
+import 'package:exercise3/screens/edit/edit_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -71,13 +72,18 @@ else{
   }
 
  void  onTap(BuildContext context, int index, todoList) async {
-   final todo = await Navigator.pushNamed(context, '/edit',
-  arguments: _todoList[index]);
- 
-   if ( todo != null){
-     _state.updateTodo();}
+ final _result = Navigator.push(
+                context,
+                EditScreen.route(
+                    isEditing: true, data: Todo.copy(_state.todoList[index])));
+            _result.then((resultTodo) {
+              if (resultTodo != null) {
+                _state.updateTodo(index: index, todo: resultTodo);
+              }
+            });
+          }
  }
 
  
-}
+
 
