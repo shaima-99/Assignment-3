@@ -63,7 +63,7 @@ class Bar extends StatelessWidget implements PreferredSizeWidget {
 final _user = await Navigator.pushNamed(context, '/logout');
 if (_user != null){
   _state.user =null;
-  _state.logoutUser = true;
+  _state.loginUser = false;
 }
  }
 
