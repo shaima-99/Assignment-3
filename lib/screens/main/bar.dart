@@ -38,7 +38,7 @@ class Bar extends StatelessWidget implements PreferredSizeWidget {
           Text('_state.user.name', style: TextStyle(fontSize: 12.0)),
         ],
       ),
-      actions: [IconButton(icon: Icon(Icons.login), onPressed: () => _onLogout(context))],
+      actions: [IconButton(icon: Icon(Icons.login), onPressed: () => _onLogout())],
     );
   }
   else {
@@ -58,14 +58,8 @@ class Bar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
- void  _onLogout(BuildContext context) async {
-
-final _user = await Navigator.pushNamed(context, '/logout');
-if (_user != null){
-  _state.user =null;
-  _state.loginUser = false;
-}
- }
+void _onLogout() => _state.user = null;
+ 
 
   _onLogin(BuildContext context) async {
 

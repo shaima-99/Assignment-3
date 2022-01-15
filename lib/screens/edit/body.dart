@@ -16,6 +16,7 @@
 //        b. Cancel the changes - i.e. when the 'Cancel' button is tapped on.
 //-----------------------------------------------------------------------------------------------------------------------------
 
+import 'package:exercise3/models/todo.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_screen.dart';
@@ -31,17 +32,25 @@ class Body extends StatelessWidget {
       children: [
         _buildTextLisTile(
             label: 'Title',
-            value: 'Todo title goes here',
-            onChanged: (value) {}),
+            value: _state.title,
+            onChanged: (value) => _state.title = value),
         _buildTextLisTile(
             label: 'Description',
-            value: 'Todo description goes here',
-            onChanged: (value) {}),
-        CheckboxListTile(
-          value: false,
-          onChanged: (value) {},
-          title: Text('Done'),
-        ),
+            value: _state.description,
+            onChanged: (value) => _state.description = value),
+        if (_state.isEditScreen == true)
+          Center(
+            child: CheckboxListTile(
+              value: _state.done,
+              selected: _state.done,
+              onChanged: (value) {
+                _state.toggleTick();
+              },
+              title: Text('Done'),
+            ),
+          )
+        else
+          Center(),
         _buildButtons(context)
       ],
     );
@@ -64,15 +73,23 @@ class Body extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          child: Text('Ok'),
-          onPressed: () {},
-        ),
+            child: Text('Ok'),
+            onPressed: () async {
+              if (_state.title != null && _state.description != null) {
+                return Navigator.pop(context, _state.makeNewTodo());
+              } else {
+                return Navigator.pop(context);
+              }
+            }),
         SizedBox(width: 10.0),
         ElevatedButton(
           child: Text('Cancel'),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ],
     );
   }
 }
+

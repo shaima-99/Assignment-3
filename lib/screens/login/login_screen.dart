@@ -26,34 +26,34 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  bool get showErrorMessage => null;
   String _username = '';
   String _password = '';
-  bool _showpassword = false;
-  bool _showErrorMessage =false;
-
+  bool _showpassword = true;
+  String _showErrorMessage = "";
 
   get username => _username;
-  set username(value) => _username = value;
+  set username(value) => setState(() {
+        _username = value;
+      });
 
   get password => _password;
-  set password(value) => _password = value;
+  set password(value) => setState(() => _password = value);
 
-  get showPassword => _showpassword;
-  set showpassword(value) => _showpassword =value;
+  get showpassword => _showpassword;
+  set showpassword(value) => setState(() => _showpassword = value);
 
-  get showErroeMessage => _showErrorMessage;
+  get showErrorMessage => _showErrorMessage;
   set showErrorMessage(value) => setState(() => _showErrorMessage = value);
-
-
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () => Future.value(true),
       child: SafeArea(
         child: Scaffold(
-          body: Body(),
+          body: Body(
+            state: this,
+          ),
         ),
       ),
     );

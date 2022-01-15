@@ -17,14 +17,11 @@
 //        b. Cancel the login - i.e. when the 'Cancel' button is tapped on.
 //-----------------------------------------------------------------------------------------------------------------------------
 
-
 import 'package:flutter/material.dart';
 
 import '../../services/user_service.dart';
 import '../../models/user.dart';
 import 'login_screen.dart';
-
-
 
 class Body extends StatelessWidget {
   const Body({state}) : _state = state;
@@ -38,32 +35,26 @@ class Body extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildTextField(
-            hint: 'Username', 
-            icon: Icons.people, 
-            onChanged: (value) => () => _state.username = value ),
+            hint: 'Username',
+            icon: Icons.people,
+            onChanged: (value) => _state.username = value),
         _buildTextField(
             hint: 'Password',
-            isObsecure: !_state.showPassword,
+            isObsecure: !_state.showpassword, //change state for show passwrod
             icon: Icons.lock,
-            button: IconButton(icon: Icon(Icons.visibility), 
-            onPressed: () => _state.showpassword = !_state.showPassword),
+            button: IconButton(
+                icon: Icon(Icons.visibility),
+                onPressed: () => _state.showpassword = !_state.showpassword),
             onChanged: (value) => _state.password = value),
         Text(
-          getMessage(),
+          _state.showErrorMessage,
+          //'Invalid username or password!',
           style: TextStyle(color: Colors.red, fontSize: 20.0),
         ),
         SizedBox(height: 10.0),
         _buildButtons(context)
       ],
     );
-  }
-
-  String getMessage()
-  {
-    if(_state.showErrorMessage)
-    return 'Invalid username or password!';
-    else
-    return "";
   }
 
   TextField _buildTextField(
@@ -85,34 +76,33 @@ class Body extends StatelessWidget {
       children: [
         ElevatedButton(
           child: Text('Log in'),
-          onPressed: () => _onLoginPressed(context),
+          onPressed: () async {
+            if (_state.username.trim() == '' || _state.password.trim() == '') {
+              _state.showErrorMessage = 'Enter your username and password';
+            } else {
+              final _user = await UserService.getUserByLoginAndPassword(
+                  login: _state.username, password: _state.password);
+              // print(_user.runtimeType); -> NULL
+              if (_user != null) {
+                var showU = User.copy(_user);
+                Navigator.pop(
+                    context,
+                    User(
+                        id: showU.id,
+                        name: showU.name,
+                        photoUrl: showU.photoUrl));
+              } else {
+                _state.showErrorMessage = 'Wrong Username/Password.';
+              }
+            }
+          },
         ),
         SizedBox(width: 10.0),
         ElevatedButton(
           child: Text('Cancel'),
-          onPressed: () => _onLoginPressed(context),
+          onPressed: () => Navigator.pushNamed(context, '/'),
         ),
       ],
     );
   }
-
-
-void _onLoginPressed(context) async {
-  final _user =await UserService.getUserByLoginAndPassword(
-    login: _state.username,
-    password: _state.password
-
-  );
-  if (_user==null)
-  {
-    _state.showErrorMessage = true;
-  }
-  else
-  {
-    Navigator.pop(context, _user);
-  }
-}
-
-void _onCancelPressed(context) => Navigator.pop(context, null);
-
 }

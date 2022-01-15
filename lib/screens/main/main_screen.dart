@@ -59,6 +59,8 @@ List<Todo> _todoList;
 
   get user => _user;
 
+ // set logoutUser(bool logoutUser) {}
+
  set user(value) { _user = value;
  refreshTodoListFuture();} 
 
