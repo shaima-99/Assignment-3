@@ -22,6 +22,10 @@ class Body extends StatelessWidget {
 
   final MainScreenState _state;
 
+  get _todoList => null;
+
+  get todo => null;
+
 
 
  
@@ -66,7 +70,13 @@ else{
        );
   }
 
-  onTap(BuildContext context, int index, todoList) {}
+ void  onTap(BuildContext context, int index, todoList) async {
+   final _todo = await Navigator.pushNamed(context, '/edit',
+  arguments: _todoList[index]);
+ 
+   if ( todo != null){
+     _state.updateTodo();}
+ }
 
  
 }
